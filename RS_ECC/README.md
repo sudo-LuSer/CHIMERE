@@ -95,8 +95,8 @@ CHIMERE/RS_ECC/
 
 | Fichier | Rôle |
 |---------|------|
-| `rs_tools.hpp/.cpp` | Définition des opérations arithmétiques dans GF(2³) : addition, multiplication, calcul de l’inverse, évaluation de polynômes, recherche de racines, etc. Utilisé à la fois par l’encodeur et le décodeur. |
-| `rs_encoder.hpp/.cpp` | Implémentation logicielle de l’encodeur Reed‑Solomon (mêmes paramètres que le VHDL). Fournit une méthode `encode()` qui prend un vecteur de K symboles et retourne les N symboles du mot de code. |
+| `rs_tools.hpp/.cpp` | Définition des opérations arithmétiques dans GF(2^m) : addition, multiplication, calcul de l’inverse, évaluation de polynômes, recherche de racines, etc. Utilisé à la fois par l’encodeur et le décodeur. |
+| `rs_encoder.hpp/.cpp` | Implémentation logicielle de l’encodeur Reed‑Solomon. Fournit une méthode `encode()` qui prend un vecteur de K symboles et retourne les N symboles du mot de code. |
 | `rs_decoder.hpp/.cpp` | Décodeur Reed‑Solomon logiciel utilisant l’algorithme de Berlekamp‑Massey (ou équivalent). Permet de corriger jusqu’à `(N-K)/2` erreurs par bloc. |
 | `main.cpp` | Programme principal de test : génère des messages aléatoires, les encode, injecte des erreurs contrôlées, les décode et compare avec le message original. Utilisé pour valider l’implémentation matérielle par comparaison. |
 

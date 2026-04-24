@@ -9,7 +9,7 @@ include_directories(include
 
 add_executable(RS_RUN 
     src/main.cpp 
-    src/RS_Encoder.cpp 
+    # src/RS_Encoder.cpp 
     src/RS_Decoder.cpp 
     src/RS_tools.cpp
     # src/RS_ENCODER_NTL.cpp

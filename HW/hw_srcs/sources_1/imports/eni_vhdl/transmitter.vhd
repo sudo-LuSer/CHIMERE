@@ -189,11 +189,17 @@ end process;
 
 process(clk)
 begin
-    if(rising_edge(clk)) then
-        if (trait_enable = '1')then
-            data_valid <= dv_out_tb;
-        else 
+    if rising_edge(clk) then
+        if rst = '1' then
             data_valid <= '0';
+        else
+            if trait_enable = '1' then
+                data_valid <= dv_out_tb;
+            elsif init_enable = '1' then
+                data_valid <= chgt_val;  
+            else
+                data_valid <= '0';
+            end if;
         end if;
     end if;
 end process;

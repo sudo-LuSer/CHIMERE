@@ -99,20 +99,21 @@ begin
 
     process (compute_state, data_in)
     begin
+        data_in_reg <= (others => '0');
+        enable_reg  <= '0';
+    
         case compute_state is
-            when IDLE | WAIT_COMPUTE | READY =>
-                data_in_reg <= (others => '0');
-                enable_reg <= '0';
             when ENCODE_1 =>
-                enable_reg <= '1';
+                enable_reg  <= '1';
                 data_in_reg <= data_in(2 downto 0);
             when ENCODE_2 =>
+                enable_reg  <= '1';   -- <- ajout
                 data_in_reg <= data_in(5 downto 3);
             when ENCODE_3 =>
+                enable_reg  <= '1';   -- <- ajout
                 data_in_reg <= data_in(8 downto 6);
-            when others =>
-                enable_reg <= '0';
-                data_in_reg <= (others => '0');
+            when others => 
+                -- conserve mm valeurs par default
         end case;
     end process;
 

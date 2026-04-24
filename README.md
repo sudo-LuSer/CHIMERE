@@ -49,7 +49,7 @@ CHIMERE_DEVELOP/
       ── Qt/            # C++ Graphical Interface of Ethernet communication
       ── RS_ECC/        # C++ Library of the `RS(n,k)` encodec
 ├── HW/ 
-      ── hw_srcs/               # VHDL implementation for FPGA of the CHIMERE HW part (ENIGMA + RS_ENCODER + (injector error optionnal))
+      ── hw_srcs/       # VHDL implementation for FPGA of the CHIMERE HW part (ENIGMA + RS_ENCODER + (injector error optionnal))
                 ── modules/
                             ── ETHERNET/    # VHDL & Verilog implementation for FPGA of ETHERNET Com
                             ── VHDL_ENIGMA/ # VHDL implementation for FPGA of the ENIGMA ENCRYPTION

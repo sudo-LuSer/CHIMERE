@@ -1,1 +1,0 @@
-Version partiellement fonctionnelle ( fonctionne pour les 15 premiers octets) qui effectue un traitement enigma sur une trame ethernet reçue, à instancier dans un projet vivado 

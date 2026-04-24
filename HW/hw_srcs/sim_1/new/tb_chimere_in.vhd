@@ -1,73 +1,90 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity tb_chimere_in is
 end tb_chimere_in;
 
 architecture sim of tb_chimere_in is
-
     component TX_CHIMERE
-        Port ( 
-            clk      : in  STD_LOGIC;
-            rst      : in  STD_LOGIC;
-            enable   : in  STD_LOGIC;
-            data_in  : in  STD_LOGIC_VECTOR (7 downto 0);
-            data_out : out STD_LOGIC_VECTOR (20 downto 0);
-            ready    : out STD_LOGIC
-        );
+        port ( clk : in std_logic; rst : in std_logic; enable : in std_logic;
+               data_in : in std_logic_vector(7 downto 0);
+               data_out : out std_logic_vector(20 downto 0);
+               ready : out std_logic );
     end component;
-
-    signal clk      : STD_LOGIC := '0';
-    signal rst      : STD_LOGIC := '1';
-    signal enable   : STD_LOGIC := '0';
-    signal data_in  : STD_LOGIC_VECTOR(7 downto 0) := X"41";  -- lettre 'A'
-    signal data_out : STD_LOGIC_VECTOR(20 downto 0);
-    signal ready    : STD_LOGIC;
-
+    signal clk : std_logic := '0';
+    signal rst, enable : std_logic;
+    signal data_in : std_logic_vector(7 downto 0);
+    signal data_out : std_logic_vector(20 downto 0);
+    signal ready : std_logic;
     constant CLK_PERIOD : time := 10 ns;
-
 begin
-
-    uut: TX_CHIMERE
-        port map (
-            clk      => clk,
-            rst      => rst,
-            enable   => enable,
-            data_in  => data_in,
-            data_out => data_out,
-            ready    => ready
-        );
-
-    -- Horloge
+    uut: TX_CHIMERE port map (clk, rst, enable, data_in, data_out, ready);
     clk <= not clk after CLK_PERIOD/2;
-
-    -- Souvenez-vous : clk, rst, enable, data_in, data_out, ready
     process
     begin
         -- Reset
-        rst <= '1'; enable <= '0'; wait for 3*CLK_PERIOD;
-        rst <= '0'; wait for CLK_PERIOD;
-    
-        -- Envoyer 'A'
+        rst <= '1'; enable <= '0';
+        wait for 3*CLK_PERIOD;
+        rst <= '0';
+        wait for CLK_PERIOD;
+
+        -- ================== Phase d'initialisation Enigma (9 octets) ==================
+        -- Configuration : rotor 1 = 1, pos = 0 0
+        data_in <= X"31"; enable <= '1';
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        data_in <= X"30"; enable <= '1';
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        data_in <= X"30"; enable <= '1';
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        -- rotor 2 = 2, pos = 0 0
+        data_in <= X"32"; enable <= '1';
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        data_in <= X"30"; enable <= '1';
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        data_in <= X"30"; enable <= '1';
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        -- rotor 3 = 3, pos = 0 0
+        data_in <= X"33"; enable <= '1';
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        data_in <= X"30"; enable <= '1';
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        data_in <= X"30"; enable <= '1';
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        -- ================== Lettres � chiffrer ==================
+        -- 'A'
         data_in <= X"41"; enable <= '1';
-        wait until rising_edge(clk) and ready = '1' for 500*CLK_PERIOD;
-        enable <= '0';
-        wait for 2*CLK_PERIOD;
-    
-        -- Envoyer 'B'
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        -- 'B'
         data_in <= X"42"; enable <= '1';
-        wait until rising_edge(clk) and ready = '1' for 500*CLK_PERIOD;
-        enable <= '0';
-        wait for 2*CLK_PERIOD;
-    
-        -- Envoyer 'C'
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
+        -- 'C'
         data_in <= X"43"; enable <= '1';
-        wait until rising_edge(clk) and ready = '1' for 500*CLK_PERIOD;
-        enable <= '0';
-        wait for 2*CLK_PERIOD;
-    
+        wait until rising_edge(clk) and ready = '1';
+        enable <= '0'; wait for 2*CLK_PERIOD;
+
         wait;
     end process;
-
 end sim;

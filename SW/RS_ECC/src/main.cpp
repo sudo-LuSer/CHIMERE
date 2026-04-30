@@ -1,77 +1,39 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <cstdint>
-#include <algorithm>
-#include <stdexcept>
-
+#include <bits/stdc++.h>
 #include "RS_tools.hpp"
 #include "RS_Decoder.hpp"
 
-std::vector<int> bits21_to_symbols(uint32_t data) {
-    std::vector<int> symbols(7);
-    for (int i = 0; i < 7; ++i)
-        symbols[i] = (data >> (3 * i)) & 0x7;
-    return symbols;
-}
+#define pb push_back 
 
-uint8_t symbols_to_byte(const std::vector<int>& msg) {
-    if (msg.size() < 3) return 0;
-    return (msg[2] << 6) | (msg[1] << 3) | msg[0];
-}
-
-std::vector<int> parse_symbol_string(const std::string& s) {
-    std::vector<int> res;
-    for (char c : s) {
-        if (c < '0' || c > '7')
-            throw std::runtime_error("Caractere invalide");
-        res.push_back(c - '0');
-    }
-    return res;
-}
-
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <mot_de_code> [<mot_de_code> ...]\n";
-        return 1;
-    }
-
+int main(int argc,char** argv) {
     int m = 3;
-    int n = (1 << m) - 1;
+    int n  = (1 << m) - 1;
     int k = 3;
+    int t = (n - k) / 2;
+
     GaloisField gf(m);
-    RS_Decoder decoder(n, k, gf);
+    RS_Decoder dec(n, k, gf); 
+
+
 
     for (int i = 1; i < argc; ++i) {
-        std::string arg(argv[i]);
-        std::vector<int> received;
-
-        if (arg.rfind("0x", 0) == 0) {
-            uint32_t val = std::stoul(arg, nullptr, 16);
-            received = bits21_to_symbols(val);
-        } 
-        
-        else {
-            received = parse_symbol_string(arg);
-            if (received.size() != 7) {
-                std::cerr << "Erreur : 7 symboles attendus\n";
-                continue;
-            }
+        unsigned char *conv_in = reinterpret_cast <unsigned char*> (argv[i]);
+        std :: vector <int> received_msg;
+        for(int j = 0 ; conv_in[j] ; ++j){
+            received_msg.pb(conv_in[j] - 48);
         }
 
-        std::vector<int> corrected = decoder.decode(received);
-        std::vector<int> message(corrected.begin(), corrected.begin() + k);
+        // error injection
 
-        std::cout << "Entree : ";
-        for (int x : received) std::cout << x << " ";
-        std::cout << "-> Corrige : ";
-        for (int x : corrected) std::cout << x << " ";
-        std::cout << "-> Message : ";
-        for (int x : message) std::cout << x << " ";
+        //received_msg[1] = 1;
 
-        uint8_t ch = symbols_to_byte(message);
-        std::cout << "-> Caractere : '" << (char)ch << "' (0x" << std::hex << (int)ch << std::dec << ")\n";
-    }
+        //std :: cout << "AFFICHAGE Du MESSAGE RECU : " << std :: endl; 
+        //for(auto x : received_msg)
+            //std :: cout << x << " "; 
 
-    return 0;
+        std :: vector <int> decoded_msg = dec.decode(received_msg);
+        //std :: cout << "AFFICHAGE Du MESSAGE DECODER : " << std :: endl; 
+        for(auto x : decoded_msg)
+            std :: cout << x << " "; 
+        std :: cout << std :: endl;
+    }   
 }

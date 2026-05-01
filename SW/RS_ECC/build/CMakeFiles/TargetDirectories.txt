@@ -1,3 +1,0 @@
-/mnt/c/Users/Nasr-allah/Desktop/CHIMERE-Develop/CHIMERE-Develop/SW/RS_ECC/build/CMakeFiles/RS_RUN.dir
-/mnt/c/Users/Nasr-allah/Desktop/CHIMERE-Develop/CHIMERE-Develop/SW/RS_ECC/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/Nasr-allah/Desktop/CHIMERE-Develop/CHIMERE-Develop/SW/RS_ECC/build/CMakeFiles/rebuild_cache.dir

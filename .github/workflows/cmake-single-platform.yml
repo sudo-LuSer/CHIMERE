@@ -6,21 +6,40 @@ on:
   pull_request:
     branches: ["main"]
 
+# Annule les runs précédents sur la même branche / PR quand on pousse à nouveau
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   BUILD_TYPE: Release
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache CMake build
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/SW/RS_ECC/build
+          key: ${{ runner.os }}-cmake-${{ hashFiles('SW/RS_ECC/CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
 
       - name: Configure CMake
-        run: cmake -S ${{ github.workspace }}/SW/RS_ECC -B ${{ github.workspace }}/SW/RS_ECC/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+        run: >
+          cmake
+          -S ${{ github.workspace }}/SW/RS_ECC
+          -B ${{ github.workspace }}/SW/RS_ECC/build
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
       - name: Build
-        run: cmake --build ${{ github.workspace }}/SW/RS_ECC/build --config ${{ env.BUILD_TYPE }}
+        run: cmake --build ${{ github.workspace }}/SW/RS_ECC/build --parallel $(nproc)
 
       - name: Test
         working-directory: ${{ github.workspace }}/SW/RS_ECC/build
-        run: ctest -C ${{ env.BUILD_TYPE }}
+        run: ctest --output-on-failure

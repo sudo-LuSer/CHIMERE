@@ -1,9 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <cstdint>
-#include <algorithm>
-#include <stdexcept>
+#include <bits/stdc++.h> 
 
 #include "RS_tools.hpp"
 #include "RS_Decoder.hpp"
@@ -62,15 +57,16 @@ int main(int argc, char* argv[]) {
         std::vector<int> corrected = decoder.decode(received);
         std::vector<int> message(corrected.begin(), corrected.begin() + k);
 
-        std::cout << "Entree : ";
-        for (int x : received) std::cout << x << " ";
-        std::cout << "-> Corrige : ";
-        for (int x : corrected) std::cout << x << " ";
-        std::cout << "-> Message : ";
-        for (int x : message) std::cout << x << " ";
+        // std::cout << "Entree : ";
+        // for (int x : received) std::cout << x << " ";
+        // std::cout << "-> Corrige : ";
+        // for (int x : corrected) std::cout << x << " ";
+        // std::cout << "-> Message : ";
+        // for (int x : message) std::cout << x << " ";
 
         uint8_t ch = symbols_to_byte(message);
-        std::cout << "-> Caractere : '" << (char)ch << "' (0x" << std::hex << (int)ch << std::dec << ")\n";
+        // std::cout << "-> Caractere : '" << (char)ch << "' (0x" << std::hex << (int)ch << std::dec << ")\n";
+        std :: cout << std :: hex << ch << std :: endl; 
     }
 
     return 0;
